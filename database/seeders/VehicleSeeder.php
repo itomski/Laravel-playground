@@ -16,7 +16,7 @@ class VehicleSeeder extends Seeder
     public function run()
     {
         // status enum: 'Ready', 'Blocked', 'Broken'
-
+        
         /*
         Vehicle::create([
             'registration' => 'HH:AB 123', 
