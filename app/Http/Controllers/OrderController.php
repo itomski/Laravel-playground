@@ -40,7 +40,7 @@ class OrderController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        
     }
 
     /**
@@ -86,7 +86,6 @@ class OrderController extends Controller
     public function destroy(Order $order)
     {
         $order->delete();
-        //return 'Order mit der id '.$order->id.' wird gelöscht';
         return redirect()->route('order.index');
     }
 }
