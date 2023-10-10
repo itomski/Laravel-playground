@@ -6,19 +6,18 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Vehicle extends Model
+class Customer extends Model
 {
     use HasFactory;
     use SoftDeletes;
 
     protected $fillable = [
-        'registration', 'brand', 'type', 'description', 'status'
+        'firstname', 'lastname', 'email', 'city', 'birthdate', 'active' 
     ];
 
-    // Hier können Casts für Attribute festgelegt werden
-    // Die Casts werden automatisch beim Belegn des Objekts vorgenommen
     protected $casts = [
-        // 'brand' => 'int'
+        'birthdate' => 'datetime', 
+        'active' => 'boolean' 
     ];
 
     public function orders() {

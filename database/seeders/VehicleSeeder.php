@@ -15,8 +15,6 @@ class VehicleSeeder extends Seeder
      */
     public function run()
     {
-        // status enum: 'Ready', 'Blocked', 'Broken'
-        
         /*
         Vehicle::create([
             'registration' => 'HH:AB 123', 
@@ -34,5 +32,6 @@ class VehicleSeeder extends Seeder
         ]);
         */
         Vehicle::factory()->count(100)->create();
+        $this->command->info('Beispieldaten für Vehicles wurden erzeugt');
     }
 }

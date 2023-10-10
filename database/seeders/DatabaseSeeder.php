@@ -14,15 +14,13 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+        // php artisan db:seed // führt nur die Seeder aus
+        // php artisan migrate --seed // führt nur die Migrations aus und danach die Seeder
+        // php artisan migrate:refresh --seed // aktuallisiert die Migrations und führt danach die Seeder aus
+
         $this->call([
-            VehicleSeeder::class // Ruft den ModelSeeder auf
+            VehicleSeeder::class, // Ruft den ModelSeeder auf
+            CustomerSeeder::class 
         ]);
-
-        // \App\Models\User::factory(10)->create();
-
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
     }
 }
