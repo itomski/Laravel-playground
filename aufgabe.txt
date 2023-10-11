@@ -1,0 +1,6 @@
+Schreibe eine Controller für Customer
+Entwerfe ein passendes Formular für das Erfassen des Customers
+Schreibe passende Validierungsregeln dafür
+Führe alles zusammen :-)
+
+Falls noch viel Zeit übrig ist: 20
