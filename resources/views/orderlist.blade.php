@@ -5,9 +5,9 @@
     <div class="col">
 
         @if(session('msg'))
+            <div class="alert alert-success" role="alert">
             {{ session('msg') }}
-            {{-- session()->pull('msg') --}}
-            {{-- pull entfernt den Wert beim AUslesen aus der Session --}}
+            </div>
         @endif
 
         @if(count($orders))
@@ -32,9 +32,7 @@
                     <td>{{ $order->end->format('d.m.Y') }}</td>
                     <td>{{ $order->status }}</td>
                     <td>
-                        <form action="{{ route('order.edit', $order->id)}}" method="GET">
-                            <button class="btn btn-warning">Bearbeiten</button>
-                        </form>
+                        <a href="{{ route('order.edit', $order->id)}}" class="btn btn-warning">Bearbeiten</a>
 
                         <form action="{{ route('order.destroy', $order)}}" method="POST">
                             @csrf
