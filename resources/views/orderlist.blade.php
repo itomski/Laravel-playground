@@ -4,6 +4,12 @@
 <div class="row">
     <div class="col">
 
+        @if(session('msg'))
+            {{ session('msg') }}
+            {{-- session()->pull('msg') --}}
+            {{-- pull entfernt den Wert beim AUslesen aus der Session --}}
+        @endif
+
         @if(count($orders))
         <table class="table">
             <thead>
@@ -22,8 +28,8 @@
                 <tr>
                     <td>{{ $order->customer->firstname }} {{ $order->customer->lastname }}</td>
                     <td>{{ $order->vehicle->registration }}, {{ $order->vehicle->brand }}, {{ $order->vehicle->type }} </td>
-                    <td>{{ $order->start }}</td>
-                    <td>{{ $order->end }}</td>
+                    <td>{{ $order->start->format('d.m.Y') }}</td>
+                    <td>{{ $order->end->format('d.m.Y') }}</td>
                     <td>{{ $order->status }}</td>
                     <td>
                         <form action="{{ route('order.edit', $order->id)}}" method="GET">

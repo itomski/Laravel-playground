@@ -40,7 +40,27 @@ class OrderController extends Controller
      */
     public function store(Request $request)
     {
-        
+        $request->validate([
+            'start' => 'required|date|after:now',
+            'end' => 'required|date|after:now',
+            'customer_id' => 'required|integer|min:1',
+            'vehicle_id' => 'required|integer|min:1',
+        ]);
+
+        $order = new Order;
+        $order->fill($request->all());
+        $order->save();
+
+        // Order::create($request->all());
+
+        //session(['msg' => 'Bestellung wurde gespeichert']); // Wird dauerhaft in die Session geschrieben
+        session()->put('msg', 'Bestellung wurde gespeichert');
+
+        //session()->flash('msg', 'Bestellung wurde gespeichert'); // Nur bis zur nächten Seite verfügbar
+
+        return redirect()
+            ->route('order.index');
+            //->with('msg', 'Bestellung wurde gespeichert'); // Hängt eine Session dran
     }
 
     /**
@@ -86,6 +106,7 @@ class OrderController extends Controller
     public function destroy(Order $order)
     {
         $order->delete();
-        return redirect()->route('order.index');
+        return redirect()
+            ->route('order.index');
     }
 }

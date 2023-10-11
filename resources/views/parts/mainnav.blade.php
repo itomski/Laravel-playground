@@ -1,7 +1,6 @@
 <nav>
     <ul>
-        <li><a href="">Link1</a></li>
-        <li><a href="">Link2</a></li>
-        <li><a href="">Link3</a></li>
+        <li><a href="{{ route('order.index') }}">Bestellungen</a></li>
+        <li><a href="{{ route('order.create') }}">Neue Bestellung</a></li>
     </ul>
 </nav>
