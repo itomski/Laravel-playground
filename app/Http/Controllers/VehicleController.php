@@ -15,8 +15,11 @@ class VehicleController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+        $wert = $request->request->get('wert');
+        $request->request->set('wert', $wert += 100);
+
         $names = ['peter', 'carol', 'natasha', null, 'bruce', 'carol', 'tony', 'steve', '', 'natasha'];
         $collection = collect($names);
 
@@ -110,11 +113,37 @@ class VehicleController extends Controller
         // return Vehicle::all(); // Sendet eine Abfrage
 
         // wird in stücken geholt
-        LazyCollection::make(function(){
-            yield '';// definieren in welchen Stücken die Daten abgeholt werden
+        /*
+        $erg = LazyCollection::make(function(){
+            // definieren in welchen Stücken die Daten abgeholt werden
+        });
+        return $erg;
+        */
+
+        //return get_class(Vehicle::get()); // Elequent-Collection: Stellt eine Anfrage und holte alle Daten
+        //return get_class(Vehicle::lazy()); // LazyCollection: Fragt die Daten Datensatz für Datensatz
+        //return get_class(Vehicle::cursor()); // LazyCollection: Fragt die Daten Datensatz für Datensatz
+        //return Vehicle::lazy()->chunk(10); // Sendet mehrere Abfragen und holt jeweis nur 10 Datensätze
+        
+        $coll = Vehicle::all();
+        //Produziert eine neue Collection und weist sie auf $coll zu
+        $coll = $coll->map(function($obj) {
+            return $obj->registration;
         });
 
-        return Vehicle::lazy()->chunk(10); // Sendet mehrere Abfragen und holt jeweis nur 10 Datensätze
+        // Hängt diese Methode an neue Collections
+        Collection::macro('getRegs', function() {
+            return $this->map(function($obj) {
+                return $obj->registration;
+            });
+        });
+
+        $coll = Vehicle::all();        
+
+        logger()->info('Log aus dem Controller.');
+
+        //return $coll;
+        return $coll->getRegs();
     }
 
     /**

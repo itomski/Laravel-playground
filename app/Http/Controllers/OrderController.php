@@ -10,6 +10,16 @@ use Illuminate\Http\Request;
 
 class OrderController extends Controller
 {
+    public function __construct()
+    {
+        // Aktiviert die Middleware für alle Funktionen des Controllers
+        // Ein Eintrag in die Routes ist nicht mehr nötig
+        $this->middleware('prelog:order'); 
+
+        // Aktiviert die Middleware nur für die index-Methode
+        // $this->middleware('prelog')->only('index');
+    }
+
     /**
      * Display a listing of the resource.
      *

@@ -21,4 +21,8 @@ Route::get('/', function () {
 
 Route::resource('/order', OrderController::class);
 
-Route::resource('/vehicle', VehicleController::class);
+// Middleware wird selektiv an Routes gehängt
+Route::resource('/vehicle', VehicleController::class)->middleware(['postlog', 'prelog:vehicle']);
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
