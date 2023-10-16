@@ -2,8 +2,10 @@
 
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\VehicleController;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 /*
 |--------------------------------------------------------------------------
@@ -67,4 +69,19 @@ Route::middleware('auth.basic')->group(function() {
     Route::get('/test3', function() {
         return 'TEST3';
     });
+});
+
+Route::get('/debug-page', function(Request $request) {
+    $user = $request->user();
+    if($user) {
+        Log::alert('Info-Info von User: '.$user->name);
+        Log::error('Error-Info von User: '.$user->name);
+        Log::warning('Warning-Info von User: '.$user->name);
+        Log::notice('Notice-Info von User: '.$user->name);
+        Log::info('Info-Info von User: '.$user->name);
+        Log::debug('Debug-Info von User: '.$user->name);
+        //logger()->debug('Debug-Info von User: '.$user->name); // mit dem Helper
+    } else
+        Log::debug('Debug-Info von Gast');
+    return 'Mein Content';
 });

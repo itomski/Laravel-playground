@@ -53,7 +53,14 @@ return [
     'channels' => [
         'stack' => [
             'driver' => 'stack',
-            'channels' => ['single'],
+            //'channels' => ['single'],
+            'channels' => ['daily', 'slack', 'browser'],
+            'ignore_exceptions' => false,
+        ],
+
+        'live' => [
+            'driver' => 'stack', // Stack ist ein Channel aus mehreren anderen Channels
+            'channels' => ['slack'],
             'ignore_exceptions' => false,
         ],
 
@@ -65,9 +72,10 @@ return [
 
         'daily' => [
             'driver' => 'daily',
-            'path' => storage_path('logs/laravel.log'),
+            'path' => storage_path('logs/'.date('Y/m/').'laravel.log'),
             'level' => env('LOG_LEVEL', 'debug'),
-            'days' => 14,
+            //'days' => 14,
+            'days' => 0, // Nicht löschen
         ],
 
         'slack' => [
@@ -75,8 +83,17 @@ return [
             'url' => env('LOG_SLACK_WEBHOOK_URL'),
             'username' => 'Laravel Log',
             'emoji' => ':boom:',
-            'level' => env('LOG_LEVEL', 'critical'),
+            //'level' => env('LOG_LEVEL', 'critical'),
+            'level' => 'error',
         ],
+
+        'browser' => [
+            'driver' => 'monolog',
+            'level' => env('LOG_LEVEL', 'debug'),
+            'handler' => Monolog\Handler\BrowserConsoleHandler::class,
+            'formatter' => Monolog\Formatter\JsonFormatter::class,
+        ],
+
 
         'papertrail' => [
             'driver' => 'monolog',
