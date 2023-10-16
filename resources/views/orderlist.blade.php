@@ -10,6 +10,13 @@
             </div>
         @endif
 
+        @guest {{-- Prüft, ob der User NICHT angemeldet ist --}}
+            <div class="alert alert-danger">Du bist noch nicht angemeldet.</div>
+        @endguest
+        @auth {{-- Prüft, ob der User angemeldet ist --}}
+            <div class="alert alert-success">Hallo {{ auth()->user()->name }}</div>
+        @endauth
+
         @if(count($orders))
         <table class="table">
             <thead>
@@ -19,7 +26,9 @@
                     <th>Start</th>
                     <th>Ende</th>
                     <th>Status</th>
+                    @auth
                     <th>&nbsp;</th>
+                    @endauth
                 </tr>
             </thead>
 
@@ -31,6 +40,7 @@
                     <td>{{ $order->start->format('d.m.Y') }}</td>
                     <td>{{ $order->end->format('d.m.Y') }}</td>
                     <td>{{ $order->status }}</td>
+                    @auth {{-- Prüft, ob der User angemeldet ist --}}
                     <td>
                         <a href="{{ route('order.edit', $order->id)}}" class="btn btn-warning">Bearbeiten</a>
 
@@ -40,6 +50,7 @@
                             <button class="btn btn-danger">Löschen</button>
                         </form>
                     </td>
+                    @endauth
                 </tr>
                 @endforeach
             </tbody>

@@ -7,6 +7,7 @@ use App\Models\Customer;
 use App\Models\Order;
 use App\Models\Vehicle;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class OrderController extends Controller
 {
@@ -18,6 +19,13 @@ class OrderController extends Controller
 
         // Aktiviert die Middleware nur für die index-Methode
         // $this->middleware('prelog')->only('index');
+
+        // Schaltet die Auth für alle Methoden des Controllers ein
+        // Muss nicht mehr über die Routes aktiviert werden
+        //$this->middleware('auth');
+
+        // Aktiviert Auth nurch für das Speichern
+        $this->middleware('auth')->only('store', 'update');
     }
 
     /**
@@ -61,7 +69,12 @@ class OrderController extends Controller
         */
 
         // Validierung erfolgt im OrderRequest
-        $request->validate();
+        //$request->validate();
+
+        // Abfrage des angemeldeten Users
+        dd(Auth::user()); // Über eine Fascade
+        //dd(auth()->user()); // Über den Helper
+        //dd($request->user()); // Über das Request
 
         $order = new Order;
         $order->fill($request->all());
