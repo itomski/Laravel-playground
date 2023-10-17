@@ -6,6 +6,7 @@ use App\Models\Order;
 use App\Models\Vehicle;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\LazyCollection;
 
 class VehicleController extends Controller
@@ -17,6 +18,26 @@ class VehicleController extends Controller
      */
     public function index(Request $request)
     {
+        // Cache::put(key, daten, dauer);
+        // $order = Order::find(10);
+        //Cache::put('selected', $order, 60); // Speichert ein Objekt für 60 Sek im Cache
+        // Cache::forever('selected', $order); // Speicht ein Objekt für ein unbestimmte Zeit im Cache
+        
+        // $orders = Order::all();
+        // Cache::putMany($orders, 60); // Speichert ein Collection von Objekten für 60 Sek im Cache
+
+        // Kein Cache
+        //$vehicles = Vehicle::all();
+
+        // Daten werden für 20 Sek im Cache festgehalten
+        // Danach erfolgt ein erneuter Abruf von der DB
+        $vehicles = Cache::remember('vehicles', 20, function(){
+            return Vehicle::all();
+        });
+
+        return view('vehiclelist', compact('vehicles'));
+
+        /*
         $wert = $request->request->get('wert');
         $request->request->set('wert', $wert += 100);
 
@@ -36,6 +57,7 @@ class VehicleController extends Controller
         // return $coll->countBy(); // liefert eine Anzahl des Vorkommens gleicher Werte
 
         $output = '';
+        */
 
         /*
         $coll->each(function($item, $key) use (&$output) {
@@ -125,6 +147,7 @@ class VehicleController extends Controller
         //return get_class(Vehicle::cursor()); // LazyCollection: Fragt die Daten Datensatz für Datensatz
         //return Vehicle::lazy()->chunk(10); // Sendet mehrere Abfragen und holt jeweis nur 10 Datensätze
         
+        /*
         $coll = Vehicle::all();
         //Produziert eine neue Collection und weist sie auf $coll zu
         $coll = $coll->map(function($obj) {
@@ -144,6 +167,7 @@ class VehicleController extends Controller
 
         //return $coll;
         return $coll->getRegs();
+        */
     }
 
     /**
@@ -153,7 +177,10 @@ class VehicleController extends Controller
      */
     public function create()
     {
-        //
+        // $order = Cache::get('selected'); // Fragt ein Objekt aus dem Cache ab
+        // Cache::forget('selected'); // Entrent ein Objekt aus dem Cache
+
+        // $orders = Cache::many('orders'); // Fragt eine Collection von Objekten aus dem Cache ab
     }
 
     /**
