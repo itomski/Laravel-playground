@@ -12,7 +12,7 @@ class Vehicle extends Model
     use SoftDeletes;
 
     protected $fillable = [
-        'registration', 'brand', 'type', 'description', 'status'
+        'registration', 'brand', 'type', 'description', 'status', 'file'
     ];
 
     // Hier können Casts für Attribute festgelegt werden

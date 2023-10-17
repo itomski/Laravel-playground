@@ -13,11 +13,15 @@
         @if(count($vehicles))
             @foreach($vehicles as $vehicle)
                 <div class="card" style="width: 18rem;">
-                    <img src="..." class="card-img-top" alt="...">
+                    <img src="{{ asset('/storage/images/'.($vehicle->file ?? 'standard.jpg')) }}" class="card-img-top" alt="...">
                     <div class="card-body">
                         <h5 class="card-title">{{ $vehicle->registration }}, {{ $vehicle->brand }}, {{ $vehicle->type }}</h5>
                         <p class="card-text">{{ $vehicle->description }}</p>
-                        <a href="#" class="btn btn-success">Go somewhere</a>
+                        <form action="{{ route('vehicle.destroy', $vehicle) }}" method="post">
+                            @csrf
+                            @method('delete')
+                            <button class="btn btn-danger">Löschen</button>
+                        </form>
                     </div>
                 </div>
             @endforeach

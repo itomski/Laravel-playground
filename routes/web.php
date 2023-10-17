@@ -2,10 +2,12 @@
 
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\VehicleController;
+use App\Models\Vehicle;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Redis;
 
 /*
 |--------------------------------------------------------------------------

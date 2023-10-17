@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Order;
 use App\Models\Vehicle;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\LazyCollection;
 
 class VehicleController extends Controller
@@ -31,11 +33,22 @@ class VehicleController extends Controller
 
         // Daten werden für 20 Sek im Cache festgehalten
         // Danach erfolgt ein erneuter Abruf von der DB
-        $vehicles = Cache::remember('vehicles', 20, function(){
-            return Vehicle::all();
-        });
 
-        return view('vehiclelist', compact('vehicles'));
+        if(Cache::has('vehicle.index')) { // Prüft, ob der Key im Cache liegt
+            return Cache::get('vehicle.index'); // Liefert die Gecachete View
+        }
+        else {
+            $vehicles = Cache::remember('vehicles', 5, function(){
+                return Vehicle::all();
+            });
+
+            $viewCache = view('vehiclelist', compact('vehicles'))->render();
+            //Cache::set('vehicle.index', $viewCache); // Die View wird in Cache geschrieben
+            Cache::put('vehicle.index', $viewCache, 5); // Die View wird für 60 Sek in Cache geschrieben
+
+            return $viewCache;
+        }
+        
 
         /*
         $wert = $request->request->get('wert');
@@ -179,8 +192,16 @@ class VehicleController extends Controller
     {
         // $order = Cache::get('selected'); // Fragt ein Objekt aus dem Cache ab
         // Cache::forget('selected'); // Entrent ein Objekt aus dem Cache
-
         // $orders = Cache::many('orders'); // Fragt eine Collection von Objekten aus dem Cache ab
+
+        if(Cache::has('vehicle.create')) {
+            return Cache::get('vehicle.create');
+        }
+        else {
+            $viewCache = view('vehicleform')->render();
+            Cache::set('vehicle.create', $viewCache);
+            return $viewCache;
+        }
     }
 
     /**
@@ -191,7 +212,41 @@ class VehicleController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'registration' => 'required|min:6|max:12',
+            'brand' => 'required|min:2',
+            'type' => 'required|min:2',
+            'description' => 'required|min:2',
+            'file' => 'required',
+        ]);
+
+        try {
+            if($request->hasFile('file')) {
+                
+                $file = $request->file('file');
+                $name = $file->getClientOriginalName();
+
+                // File muss noch in public verschoben werden
+                Storage::disk('public')->putFileAs('images', $file, $name);
+
+                Vehicle::create([
+                    'registration' => $request->input('registration'),
+                    'brand' => $request->input('brand'),
+                    'type' => $request->input('type'),
+                    'description' => $request->input('description'),
+                    'file' => $name
+                ]);
+                
+                return redirect()
+                    ->route('vehicle.index')
+                    ->with('msg', 'Fahrzeug wurde gespeichert');
+            }
+        }
+        catch(Exception $e) {
+            return redirect()
+                    ->back()
+                    ->with('msg', 'Fahrzeug konnte nicht gespeichert werden');
+        }
     }
 
     /**
@@ -236,6 +291,15 @@ class VehicleController extends Controller
      */
     public function destroy(Vehicle $vehicle)
     {
-        //
+        $file = $vehicle->file;
+        if($file) {
+            Storage::disk('public')->delete('images/'.$file);
+            //Storage::delete('images/'.$file); // Löscht auf dem standard disk
+        }
+        $vehicle->delete();
+        
+        return redirect()
+                    ->route('vehicle.index')
+                    ->with('msg', 'Fahrzeug wurde gelöscht');
     }
 }
