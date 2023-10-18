@@ -34,20 +34,22 @@ class VehicleController extends Controller
         // Daten werden für 20 Sek im Cache festgehalten
         // Danach erfolgt ein erneuter Abruf von der DB
 
+        /*
         if(Cache::has('vehicle.index')) { // Prüft, ob der Key im Cache liegt
             return Cache::get('vehicle.index'); // Liefert die Gecachete View
         }
         else {
+            */
             $vehicles = Cache::remember('vehicles', 5, function(){
                 return Vehicle::all();
             });
 
             $viewCache = view('vehiclelist', compact('vehicles'))->render();
             //Cache::set('vehicle.index', $viewCache); // Die View wird in Cache geschrieben
-            Cache::put('vehicle.index', $viewCache, 5); // Die View wird für 60 Sek in Cache geschrieben
+            //Cache::put('vehicle.index', $viewCache, 5); // Die View wird für 60 Sek in Cache geschrieben
 
             return $viewCache;
-        }
+        //}
         
 
         /*
@@ -199,7 +201,7 @@ class VehicleController extends Controller
         }
         else {
             $viewCache = view('vehicleform')->render();
-            Cache::set('vehicle.create', $viewCache);
+            //Cache::set('vehicle.create', $viewCache);
             return $viewCache;
         }
     }
@@ -212,12 +214,14 @@ class VehicleController extends Controller
      */
     public function store(Request $request)
     {
+        //$request->file('file')->isValid();
+
         $request->validate([
             'registration' => 'required|min:6|max:12',
             'brand' => 'required|min:2',
             'type' => 'required|min:2',
             'description' => 'required|min:2',
-            'file' => 'required',
+            'file' => 'required|image|max:1024'
         ]);
 
         try {
@@ -228,7 +232,8 @@ class VehicleController extends Controller
 
                 // File muss noch in public verschoben werden
                 Storage::disk('public')->putFileAs('images', $file, $name);
-
+                //Storage::disk('s3')->putFileAs('images', $file, $name);
+                
                 Vehicle::create([
                     'registration' => $request->input('registration'),
                     'brand' => $request->input('brand'),

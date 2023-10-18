@@ -4,7 +4,7 @@
 
 <div class="row">
     <div class="col-md-6">
-        <h2>Bestellung @if(isset($order)) bearbeiten. @else erzeugen. @endif</h2>
+        <h2>Fahrzeug @if(isset($order)) bearbeiten. @else erzeugen. @endif</h2>
 
         @if(isset($order))
         <form action="{{ route('vehicle.update', $order->id) }}" method="POST" enctype="multipart/form-data">
