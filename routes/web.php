@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\VehicleController;
 use App\Models\Vehicle;
 use Illuminate\Http\Request;
@@ -90,3 +91,6 @@ Route::get('/debug-page', function(Request $request) {
 });
 
 Route::get('/profile', [ProfileController::class, 'display'])->name('profile.display');
+Route::post('/profile', [ProfileController::class, 'store'])->name('profile.store');
+
+Route::get('/user', [UserController::class, 'display'])->name('user.store');

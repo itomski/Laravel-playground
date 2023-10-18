@@ -10,6 +10,7 @@ class Profile extends Model
     use HasFactory;
 
     protected $fillable = [
+        'id',
         'firstname',
         'lastname',
         'birthdate',
@@ -17,9 +18,10 @@ class Profile extends Model
         'street_nr',
         'city',
         'zip',
+        'user_id',
     ];
 
     public function user() {
-        $this->belongsTo(User::class);
+        return $this->belongsTo(User::class);
     }
 }

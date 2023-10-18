@@ -43,11 +43,11 @@ class User extends Authenticatable
     ];
 
     public function roles() {
-        $this->belongsToMany(Role::class, 'role_user', 'user_id', 'role_id')
+        return $this->belongsToMany(Role::class, 'role_user', 'user_id', 'role_id')
             ->withTimestamps();
     }
 
     public function profile() {
-        $this->hasOne(Profile::class);
+        return $this->hasOne(Profile::class);
     }
 }
