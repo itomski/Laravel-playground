@@ -11,7 +11,7 @@
 
     @include('parts.mainnav')
 
-    <div class="container">
+    <div class="container my-3">
         @yield('content')
     </div>
     

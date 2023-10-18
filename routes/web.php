@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\VehicleController;
 use App\Models\Vehicle;
 use Illuminate\Http\Request;
@@ -87,3 +88,5 @@ Route::get('/debug-page', function(Request $request) {
         Log::debug('Debug-Info von Gast');
     return 'Mein Content';
 });
+
+Route::get('/profile', [ProfileController::class, 'display'])->name('profile.display');

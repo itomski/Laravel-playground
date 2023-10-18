@@ -32,6 +32,11 @@
     @endforeach
 </div>
 
+<div class="row">
+    <div class="col">
+        {{ $vehicles->links() }}
+    </div>
+</div>
 @else
 <div class="row">
     <div class="col">

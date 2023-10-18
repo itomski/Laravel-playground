@@ -40,9 +40,13 @@ class VehicleController extends Controller
         }
         else {
             */
-            $vehicles = Cache::remember('vehicles', 5, function(){
-                return Vehicle::all();
-            });
+            //$vehicles = Cache::remember('vehicles', 5, function(){
+            //    return Vehicle::all();
+            //});
+
+            //$vehicles = Vehicle::all();
+            $vehicles = Vehicle::paginate(10);
+            //$vehicles = Vehicle::simplePaginate(10);
 
             $viewCache = view('vehiclelist', compact('vehicles'))->render();
             //Cache::set('vehicle.index', $viewCache); // Die View wird in Cache geschrieben
