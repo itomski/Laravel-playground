@@ -47,7 +47,19 @@ class User extends Authenticatable
             ->withTimestamps();
     }
 
+    public function orders() {
+        return $this->hasMany(Order::class);
+    }
+
     public function profile() {
         return $this->hasOne(Profile::class);
+    }
+
+    public function hasRole(string $roleName) {
+
+        if($this->roles()->where('name', $roleName)->first()) {
+            return true;
+        }
+        return false;
     }
 }

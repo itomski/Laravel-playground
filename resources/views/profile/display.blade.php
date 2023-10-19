@@ -17,8 +17,6 @@
         <form action="{{ route('profile.store') }}" method="post">
             @csrf
 
-            <input type="hidden" name="id" value="{{ $profile->id ?? 0 }}">
-
             <div class="form-group mb-3">
                 <label for="firstname">Vorname</label>
                 <input type="text" name="firstname" id="firstname" value="{{ $profile->firstname}}" 

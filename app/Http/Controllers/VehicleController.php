@@ -44,6 +44,8 @@ class VehicleController extends Controller
             //    return Vehicle::all();
             //});
 
+            // $this->authorize('isAdmin'); // Gate wird geprüft
+
             //$vehicles = Vehicle::all();
             $vehicles = Vehicle::paginate(10);
             //$vehicles = Vehicle::simplePaginate(10);
@@ -300,6 +302,8 @@ class VehicleController extends Controller
      */
     public function destroy(Vehicle $vehicle)
     {
+        $this->authorize('isAdmin'); // Gate wird geprüft
+
         $file = $vehicle->file;
         if($file) {
             Storage::disk('public')->delete('images/'.$file);
@@ -310,5 +314,33 @@ class VehicleController extends Controller
         return redirect()
                     ->route('vehicle.index')
                     ->with('msg', 'Fahrzeug wurde gelöscht');
+    }
+
+    public function block($id) {
+
+        $this->authorize('isAdmin');
+
+        $vehicle = Vehicle::find($id);
+        $vehicle->status = 'Blocked';
+        $vehicle->save();
+
+        return redirect()
+                    ->route('vehicle.index')
+                    ->with('msg', 'Fahrzeug wurde geblock');
+
+    }
+
+    public function ready($id) {
+
+        $this->authorize('isAdmin');
+
+        $vehicle = Vehicle::find($id);
+        $vehicle->status = 'Ready';
+        $vehicle->save();
+
+        return redirect()
+                    ->route('vehicle.index')
+                    ->with('msg', 'Fahrzeug wurde freigegeben');
+        
     }
 }

@@ -30,10 +30,13 @@ class ProfileController extends Controller
             // Validierung
         ]);
 
-        if($request->input('id') > 0) {
+        $profile = Auth::user()->profile;
+
+        if($profile) {
+            $this->authorize('isProfileOwner', $profile);
+            
             // Profil wird upgedatet
-            Profile::find($request->input('id'))
-                ->fill($request->all())
+            $profile->fill($request->all())
                 ->save();
         }
         else {

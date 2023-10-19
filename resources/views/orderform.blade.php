@@ -35,19 +35,12 @@
             </div>
 
             <div class="form-group mb-3">
-                <label for="customer_id" class="form-label">Kunde</label>
-                <select name="customer_id" id="customer_id" class="form-select @error('customer_id') border border-danger @enderror">
-                    @foreach($customers as $customer)
-                        {{-- 
-                        @if(old('customer_id') && old('customer_id') == $customer->id)
-                        <option value="{{ $customer->id }}" selected>{{ $customer->firstname }} {{ $customer->lastname }}</option>
-                        @else
-                        <option value="{{ $customer->id }}">{{ $customer->firstname }} {{ $customer->lastname }}</option>
-                        @endif
-                        --}}
-                        <option value="{{ $customer->id }}" 
-                            @selected(old('customer_id', isset($order) ? $order->customer_id : 0) == $customer->id)>
-                            {{ $customer->firstname }} {{ $customer->lastname }}
+                <label for="user_id" class="form-label">Kunde</label>
+                <select name="user_id" id="user_id" class="form-select @error('user_id') border border-danger @enderror">
+                    @foreach($users as $user)
+                        <option value="{{ $user->id }}" 
+                            @selected(old('user_id', isset($order) ? $order->user_id : 0) == $user->id)>
+                            {{ $user->profile->firstname }} {{ $user->profile->lastname }}
                         </option>
                     @endforeach
                 </select>

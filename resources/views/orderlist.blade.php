@@ -34,24 +34,28 @@
 
             <tbody>
                 @foreach($orders as $order)
-                <tr>
-                    <td>{{ $order->customer->firstname }} {{ $order->customer->lastname }}</td>
-                    <td>{{ $order->vehicle->registration }}, {{ $order->vehicle->brand }}, {{ $order->vehicle->type }} </td>
-                    <td>{{ $order->start->format('d.m.Y') }}</td>
-                    <td>{{ $order->end->format('d.m.Y') }}</td>
-                    <td>{{ $order->status }}</td>
-                    @auth {{-- Prüft, ob der User angemeldet ist --}}
-                    <td>
-                        <a href="{{ route('order.edit', $order->id)}}" class="btn btn-warning">Bearbeiten</a>
 
-                        <form action="{{ route('order.destroy', $order)}}" method="POST">
-                            @csrf
-                            @method('delete')
-                            <button class="btn btn-danger">Löschen</button>
-                        </form>
-                    </td>
-                    @endauth
-                </tr>
+                    @can('view', $order)
+                    <tr>
+                        <td>{{ $order->user->profile->firstname }} {{ $order->user->profile->lastname }}</td>
+                        <td>{{ $order->vehicle->registration }}, {{ $order->vehicle->brand }}, {{ $order->vehicle->type }} </td>
+                        <td>{{ $order->start->format('d.m.Y') }}</td>
+                        <td>{{ $order->end->format('d.m.Y') }}</td>
+                        <td>{{ $order->status }}</td>
+                        @auth {{-- Prüft, ob der User angemeldet ist --}}
+                        <td>
+                            <a href="{{ route('order.edit', $order->id)}}" class="btn btn-warning">Bearbeiten</a>
+
+                            <form action="{{ route('order.destroy', $order)}}" method="POST">
+                                @csrf
+                                @method('delete')
+                                <button class="btn btn-danger">Löschen</button>
+                            </form>
+                        </td>
+                        @endauth
+                    </tr>
+                    @endcan
+                    
                 @endforeach
             </tbody>
         </table>

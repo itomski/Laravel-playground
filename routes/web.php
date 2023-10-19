@@ -36,6 +36,8 @@ Route::resource('/order', OrderController::class);
 
 // Middleware wird selektiv an Routes gehängt
 Route::resource('/vehicle', VehicleController::class)->middleware(['postlog', 'prelog:vehicle']);
+Route::get('/vehicle/block/{id}', [VehicleController::class, 'block'])->name('vehicle.block');
+Route::get('/vehicle/ready/{id}', [VehicleController::class, 'ready'])->name('vehicle.ready');
 
 Auth::routes();
 
@@ -93,4 +95,8 @@ Route::get('/debug-page', function(Request $request) {
 Route::get('/profile', [ProfileController::class, 'display'])->name('profile.display');
 Route::post('/profile', [ProfileController::class, 'store'])->name('profile.store');
 
-Route::get('/user', [UserController::class, 'display'])->name('user.store');
+Route::get('/user', [UserController::class, 'display'])->name('user.display');
+
+Route::get('/user/role/create', [UserController::class, 'createRoles'])->name('user.role.create');
+
+Route::get('/user/role/attach', [UserController::class, 'attachRoles'])->name('user.role.attach');

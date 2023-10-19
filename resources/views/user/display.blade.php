@@ -19,7 +19,7 @@
             <li>{{ $user->name }}
                 <ul>
                     @foreach($user->roles as $role)
-                        <li>{{ $role }}</li>
+                        <li>{{ $role->name }} zugewiesen am {{ $role->pivot->created_at->format('d.m.Y') }}</li>
                     @endforeach
                 </ul>
             </li>

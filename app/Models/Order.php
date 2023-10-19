@@ -10,7 +10,7 @@ class Order extends Model
     //use HasFactory;
 
     protected $fillable = [
-        'start', 'end', 'status', 'customer_id', 'vehicle_id'
+        'start', 'end', 'status', 'user_id', 'vehicle_id'
     ];
 
     protected $casts = [
@@ -18,8 +18,14 @@ class Order extends Model
         'end' => 'datetime',
     ];
 
+    /*
     public function customer() {
         return $this->belongsTo(Customer::class);
+    }
+    */
+
+    public function user() {
+        return $this->belongsTo(User::class);
     }
 
     public function vehicle() {

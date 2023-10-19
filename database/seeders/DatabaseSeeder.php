@@ -20,7 +20,7 @@ class DatabaseSeeder extends Seeder
 
         $this->call([
             VehicleSeeder::class, // Ruft den ModelSeeder auf
-            CustomerSeeder::class 
+            //CustomerSeeder::class 
         ]);
     }
 }

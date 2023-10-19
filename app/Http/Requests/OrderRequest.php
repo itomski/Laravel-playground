@@ -26,7 +26,7 @@ class OrderRequest extends FormRequest
         return [
             'start' => 'required|date|after:now',
             'end' => 'required|date|after:now',
-            'customer_id' => 'required|integer|min:1',
+            'user_id' => 'required|integer|min:1',
             'vehicle_id' => 'required|integer|min:1',
         ];
     }

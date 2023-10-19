@@ -21,11 +21,20 @@
                 <div class="card-body">
                     <h5 class="card-title">{{ $vehicle->registration }}, {{ $vehicle->brand }}, {{ $vehicle->type }}</h5>
                     <p class="card-text">{{ $vehicle->description }}</p>
-                    <form action="{{ route('vehicle.destroy', $vehicle) }}" method="post">
-                        @csrf
-                        @method('delete')
-                        <button class="btn btn-danger">Löschen</button>
-                    </form>
+                    
+                    @can('isAdmin')
+                        <form action="{{ route('vehicle.destroy', $vehicle) }}" method="post" class="d-inline">
+                            @csrf
+                            @method('delete')
+                            <button class="btn btn-outline-danger">Löschen</button>
+                        </form>
+                        
+                        @if($vehicle->status == 'Blocked') 
+                            <a href="{{ route('vehicle.ready', $vehicle->id) }}" class="btn btn-outline-success"><i class="bi bi-unlock-fill"></i> Freigeben</a> 
+                        @else 
+                            <a href="{{ route('vehicle.block', $vehicle->id) }}" class="btn btn-outline-danger"><i class="bi bi-lock-fill"></i> Sperren</a> 
+                        @endif
+                    @endcan
                 </div>
             </div>
         </div>    

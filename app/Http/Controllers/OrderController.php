@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\OrderRequest;
 use App\Models\Customer;
 use App\Models\Order;
+use App\Models\User;
 use App\Models\Vehicle;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -15,7 +16,7 @@ class OrderController extends Controller
     {
         // Aktiviert die Middleware für alle Funktionen des Controllers
         // Ein Eintrag in die Routes ist nicht mehr nötig
-        $this->middleware('prelog:order'); 
+        //$this->middleware('prelog:order'); 
 
         // Aktiviert die Middleware nur für die index-Methode
         // $this->middleware('prelog')->only('index');
@@ -25,7 +26,8 @@ class OrderController extends Controller
         //$this->middleware('auth');
 
         // Aktiviert Auth nurch für das Speichern
-        $this->middleware('auth')->only('store', 'update');
+        //$this->middleware('auth')->only('store', 'update');
+        $this->middleware('auth');
     }
 
     /**
@@ -46,9 +48,10 @@ class OrderController extends Controller
      */
     public function create()
     {
-        $customers = Customer::all();
+        //$customers = Customer::all();
+        $users = User::all();
         $vehicles = Vehicle::all();
-        return view('orderform', compact('customers', 'vehicles'));
+        return view('orderform', compact('users', 'vehicles'));
     }
 
     /**
@@ -72,7 +75,7 @@ class OrderController extends Controller
         //$request->validate();
 
         // Abfrage des angemeldeten Users
-        dd(Auth::user()); // Über eine Fascade
+        //dd(Auth::user()); // Über eine Fascade
         //dd(auth()->user()); // Über den Helper
         //dd($request->user()); // Über das Request
 
@@ -116,9 +119,10 @@ class OrderController extends Controller
     public function edit($id)
     {
         $order = Order::find($id);
-        $customers = Customer::all();
+        //$customers = Customer::all();
+        $users = User::all();
         $vehicles = Vehicle::all();
-        return view('orderform', compact('customers', 'vehicles', 'order'));
+        return view('orderform', compact('users', 'vehicles', 'order'));
     }
 
     /**
@@ -133,6 +137,9 @@ class OrderController extends Controller
         $request->validate();
 
         $order = Order::find($id);
+
+        $this->authorize('update', $order);
+
         $order->fill($request->all());
         $order->save();
 
@@ -149,6 +156,8 @@ class OrderController extends Controller
      */
     public function destroy(Order $order)
     {
+        $this->authorize('delete', $order);
+
         $order->delete();
 
         // session()->flash('msg', 'Bestellung wurde gelöscht!');
