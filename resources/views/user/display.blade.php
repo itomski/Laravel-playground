@@ -18,7 +18,7 @@
         @foreach($users as $user)
             <li>{{ $user->name }}
                 <ul>
-                    @foreach($user->roles() as $role)
+                    @foreach($user->roles as $role)
                         <li>{{ $role }}</li>
                     @endforeach
                 </ul>
