@@ -30,7 +30,6 @@ class UserController extends Controller
         return redirect()->route('user.display')->with('msg', 'Die Rolen wurden erzeugt');
     }
 
-
     public function attachRoles() {
 
         //$user = auth()->user();
@@ -47,4 +46,5 @@ class UserController extends Controller
         //dd($user->roles());
         return redirect()->route('user.display')->with('msg', 'Die Rolen wurde zugewiesen');
     }
+    
 }

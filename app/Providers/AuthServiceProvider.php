@@ -37,6 +37,7 @@ class AuthServiceProvider extends ServiceProvider
         Gate::before(function(User $user) {
             return $user->hasRole('SuperAdmin');
         });
+        */
 
         Gate::define('isAdmin', function(User $user) { // User muss angemeldet sein
             return $user->hasRole('Admin');
@@ -53,7 +54,6 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('isProfileOwner', function(User $user, Profile $profile) {
             return $profile->user->is($user); // Prüft, ob der User Besitzer ist
         });
-        */
 
         /*
         Gate::define('isAdmin', function(?User $user) { // Für angemeldete und nicht angemeldete verwendbar
