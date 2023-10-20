@@ -46,7 +46,11 @@ class UserController extends Controller
         $roles = $request->input('role_id');
         $user->roles()->syncWithoutDetaching($roles);
 
-        Mail::to($user)->send(new RoleAttachMail());
+        // Versendet die Mail sofort
+        //Mail::to($user)->send(new RoleAttachMail($user));
+
+        // Packt die Mail in eine Queue, wo sie durch ein Worker asynchron verschickt wird
+        Mail::to($user)->queue(new RoleAttachMail($user));
 
         //$user = auth()->user();
         //$user = Auth::user();

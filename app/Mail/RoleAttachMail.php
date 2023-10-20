@@ -5,6 +5,8 @@ namespace App\Mail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
+use Illuminate\Mail\Mailables\Address;
+use Illuminate\Mail\Mailables\Attachment;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
@@ -13,14 +15,20 @@ class RoleAttachMail extends Mailable
 {
     use Queueable, SerializesModels;
 
+    // public: Sind im View sofort verfügbar
+    public $user;
+
+    // protected und private: Muss über with in der content-Methode an die view weitergegeben werden
+    protected $info; 
+
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($user)
     {
-        //
+        $this->user = $user;
     }
 
     /**
@@ -31,6 +39,7 @@ class RoleAttachMail extends Mailable
     public function envelope()
     {
         return new Envelope(
+            from: new Address('tomasz@lubowiecki.de', 'Tomasz Lubowiecki'),
             subject: 'Role Attach Mail',
         );
     }
@@ -43,7 +52,11 @@ class RoleAttachMail extends Mailable
     public function content()
     {
         return new Content(
-            view: 'view.name',
+            view: 'mails.role-attached',
+            text: 'mails.role-attached-plain',
+            //with: [
+            //    'info' => $this->info,
+            //]
         );
     }
 
@@ -54,6 +67,23 @@ class RoleAttachMail extends Mailable
      */
     public function attachments()
     {
-        return [];
+        return [
+            //Attachment::fromPath(storage_path('/path')),
+            Attachment::fromStorage('public/images/standard.jpg')
+                            ->as('bild.jpg')
+                            ->withMime('image/jpeg')
+
+        ];
     }
+
+    /*
+    // früher, vor Laravel 9
+    public function build()
+    {
+        return $this->view('mails.role-attached')
+                    ->text('mails.role-attached-plain')
+                    ->with(['info' => $this->info])
+                    ->attach('/pfad');
+    }
+    */
 }
