@@ -99,4 +99,6 @@ Route::get('/user', [UserController::class, 'display'])->name('user.display');
 
 Route::get('/user/role/create', [UserController::class, 'createRoles'])->name('user.role.create');
 
-Route::get('/user/role/attach', [UserController::class, 'attachRoles'])->name('user.role.attach');
+Route::post('/user/role/attach', [UserController::class, 'attachRoles'])->name('user.role.attach');
+
+Route::get('/user/role/select', [UserController::class, 'rolesAttachForm'])->name('user.role.select');

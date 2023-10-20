@@ -14,6 +14,10 @@
 
 <div class="row">
     <div class="col-md-6">
+        @can('isAdmin')
+        <p><a href="{{ route('user.role.select') }}" class="btn btn-success">Rechtevergabe</a></p>
+        @endcan
+
         <ul>
         @foreach($users as $user)
             <li>{{ $user->name }}

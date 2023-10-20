@@ -18,6 +18,11 @@
         <li class="nav-item">
         <a class="nav-link" href="{{ route('vehicle.create') }}">Neues Fahrzeug</a>
         </li>
+        @can('isAdmin')
+        <li class="nav-item">
+        <a class="nav-link" href="{{ route('user.display') }}">Benutzer</a>
+        </li>
+        @endcan
       </ul>
     </div>
   </div>
