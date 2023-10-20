@@ -4,6 +4,7 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VehicleController;
+use App\Jobs\SendMailToAll;
 use App\Models\Vehicle;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -102,3 +103,23 @@ Route::get('/user/role/create', [UserController::class, 'createRoles'])->name('u
 Route::post('/user/role/attach', [UserController::class, 'attachRoles'])->name('user.role.attach');
 
 Route::get('/user/role/select', [UserController::class, 'rolesAttachForm'])->name('user.role.select');
+
+Route::get('/user/sendmail', function(){
+    SendMailToAll::dispatch()->onQueue('mails');
+    //dispatch(new SendMailToAll());
+    return 'Email wurden an Queue weitergegeben';
+});
+
+Route::get('/user/wichtig', function(){
+    SendMailToAll::dispatch()->onQueue('important');
+    //dispatch(new SendMailToAll());
+    return 'Email wurden an Queue(important) weitergegeben';
+});
+
+Route::get('/user/mehrere', function(){
+    // Startet mehrere Jobs auf einen Schlag
+    SendMailToAll::withChain([
+        // weitere Jobs
+    ])->dispatch()->onQueue('important');
+    return 'Email wurden an Queue(important) weitergegeben';
+});

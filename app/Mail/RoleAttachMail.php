@@ -71,7 +71,12 @@ class RoleAttachMail extends Mailable
             //Attachment::fromPath(storage_path('/path')),
             Attachment::fromStorage('public/images/standard.jpg')
                             ->as('bild.jpg')
-                            ->withMime('image/jpeg')
+                            ->withMime('image/jpeg'),
+
+            /*
+            Attachment::fromStorageDisk('s3', 'public/images/standard.jpg')
+                            ->as('bild.jpg')
+                            ->withMime('image/jpeg')*/
 
         ];
     }
