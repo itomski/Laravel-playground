@@ -3,11 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Models\Order;
+use App\Models\User;
 use App\Models\Vehicle;
+use App\Notifications\VehicleStatusChangedNotification;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\LazyCollection;
 
@@ -324,6 +328,19 @@ class VehicleController extends Controller
         $vehicle->status = 'Blocked';
         $vehicle->save();
 
+        //$users = User::all();
+        //Notification::send($users, new VehicleStatusChangedNotification($vehicle));
+        //Notification::route('slack', env('SLACK_HOOK'))->notify(new VehicleStatusChangedNotification($vehicle));
+        
+        $user = User::find(1);
+        $user->notify(new VehicleStatusChangedNotification($vehicle));
+
+        // An einen User senden
+        /* $user = Auth::user();
+        $user->notify(new VehicleStatusChangedNotification($vehicle))
+                ->delay(now()->addMinutes(15)); // wird in 15 Minuten benachrichtigt
+        */        
+
         return redirect()
                     ->route('vehicle.index')
                     ->with('msg', 'Fahrzeug wurde geblock');
@@ -337,6 +354,12 @@ class VehicleController extends Controller
         $vehicle = Vehicle::find($id);
         $vehicle->status = 'Ready';
         $vehicle->save();
+
+        //$users = User::all();
+        //Notification::send($users, new VehicleStatusChangedNotification($vehicle));
+
+        $user = User::find(1);
+        $user->notify(new VehicleStatusChangedNotification($vehicle));
 
         return redirect()
                     ->route('vehicle.index')

@@ -1,14 +1,18 @@
 <?php
 
+use App\Exceptions\VehicleException;
+use App\Exceptions\VehicleNotFoundException;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VehicleController;
 use App\Jobs\SendMailToAll;
 use App\Models\Vehicle;
+use App\Notifications\StatusUpdate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redis;
 
@@ -123,3 +127,78 @@ Route::get('/user/mehrere', function(){
     ])->dispatch()->onQueue('important');
     return 'Email wurden an Queue(important) weitergegeben';
 });
+
+Route::get('/user/mehrere', function(){
+    //
+});
+
+Route::get('/cardata/{page}', function(int $page = 0){
+
+    /*
+    $client = new \GuzzleHttp\Client();
+
+$response = $client->request('GET', 'https://car-data.p.rapidapi.com/cars?limit=10&page='.$page, [
+	'headers' => [
+		'X-RapidAPI-Host' => 'car-data.p.rapidapi.com',
+		'X-RapidAPI-Key' => 'f0ed8b564cmshf7a8a962c4f9bdbp1fe78djsn9820c420fa32',
+	],
+]);
+
+echo $response->getBody();
+    */
+
+    $response = Http::withHeaders([
+            'X-RapidAPI-Host' => 'car-data.p.rapidapi.com',
+            'X-RapidAPI-Key' => '... Hier kommt der API-Key von RapidAPI rein ...',
+        ]
+    )->get('https://car-data.p.rapidapi.com/cars', [
+        'limit' => 10,
+        'page' => $page
+    ]);
+    return $response;
+});
+
+Route::get('/vehicle/details/{id}', function($id){
+
+    //try {
+        try {
+            $vehicle = Vehicle::findOrFail($id); // Produziert eine Exception, wenn nichts gefunden wird
+            return $vehicle;
+        }
+        catch(Exception $e) {
+            // Wenn Fahrzeug nicht gefunden wird, will ich die Exception in VehicleNotFoundException ändern
+            throw new VehicleNotFoundException();
+        }
+    /* }
+    catch(VehicleNotFoundException $e) {
+        report($e);
+    } */
+});
+
+/*
+Route::get('/vehicle/details/{id}', function($id){
+
+    //$vehicle = Vehicle::find($id);
+    try {
+        //$vehicle = Vehicle::findOrFail($id); // Produziert eine Exception, wenn nichts gefunden wird
+        
+        $vehicle = Vehicle::find($id);
+        if(!$vehicle) {
+            //throw new Exception('Daten sind nicht da');
+            throw new VehicleNotFoundException();
+
+            //$ex = new VehicleNotFoundException();
+            //throw $ex;
+        }
+        
+        return $vehicle;
+    }
+    catch(VehicleNotFoundException $e) {
+        return 'VNFE: '.$e->getMessage();
+    }
+    catch(Exception $e) {
+        return 'BASIC: '.$e->getMessage();
+    }
+});
+*/
+

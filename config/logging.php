@@ -53,8 +53,8 @@ return [
     'channels' => [
         'stack' => [
             'driver' => 'stack',
-            //'channels' => ['single'],
-            'channels' => ['daily', 'slack', 'browser'],
+            'channels' => ['daily'],
+            //'channels' => ['daily', 'browser', 'slack'],
             'ignore_exceptions' => false,
         ],
 
