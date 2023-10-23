@@ -330,10 +330,10 @@ class VehicleController extends Controller
 
         //$users = User::all();
         //Notification::send($users, new VehicleStatusChangedNotification($vehicle));
-        //Notification::route('slack', env('SLACK_HOOK'))->notify(new VehicleStatusChangedNotification($vehicle));
+        Notification::route('slack', env('SLACK_HOOK'))->notify(new VehicleStatusChangedNotification($vehicle));
         
-        $user = User::find(1);
-        $user->notify(new VehicleStatusChangedNotification($vehicle));
+        //$user = User::find(1);
+        //$user->notify(new VehicleStatusChangedNotification($vehicle));
 
         // An einen User senden
         /* $user = Auth::user();

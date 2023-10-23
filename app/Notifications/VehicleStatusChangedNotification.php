@@ -5,7 +5,8 @@ namespace App\Notifications;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
-use Illuminate\Notifications\Messages\SlackMessage;
+//use Illuminate\Notifications\Messages\SlackMessage;
+use Illuminate\Notifications\Slack\SlackMessage;
 use Illuminate\Notifications\Notification;
 
 class VehicleStatusChangedNotification extends Notification implements ShouldQueue
@@ -33,7 +34,8 @@ class VehicleStatusChangedNotification extends Notification implements ShouldQue
     public function via($notifiable)
     {
         //return ['mail', 'slack', 'database'];
-        return ['database'];
+        //return ['database'];
+        return ['slack'];
     }
 
     /**
@@ -54,7 +56,7 @@ class VehicleStatusChangedNotification extends Notification implements ShouldQue
     public function toSlack($notifiable)
     {
         return (new SlackMessage)
-                    ->from('Tomasz')
+                    ->from('Tomasz', ':ghost:')
                     ->to('#log')
                     ->content('Nachricht von Laravel');
     }
