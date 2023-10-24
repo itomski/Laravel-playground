@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Events\VehicleStatusChangedEvent;
+use App\Listeners\VehicleStatusChangedListener;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -17,6 +19,10 @@ class EventServiceProvider extends ServiceProvider
     protected $listen = [
         Registered::class => [
             SendEmailVerificationNotification::class,
+        ],
+        VehicleStatusChangedEvent::class => [
+            VehicleStatusChangedListener::class,
+            // ggfl. noch andere Listener, die hier zuhören sollen
         ],
     ];
 
@@ -37,6 +43,7 @@ class EventServiceProvider extends ServiceProvider
      */
     public function shouldDiscoverEvents()
     {
+        // true: Automatische zuordnung von Listenern zu Events
         return false;
     }
 }

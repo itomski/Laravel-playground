@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\VehicleStatusChangedEvent;
 use App\Models\Order;
 use App\Models\User;
 use App\Models\Vehicle;
@@ -328,9 +329,11 @@ class VehicleController extends Controller
         $vehicle->status = 'Blocked';
         $vehicle->save();
 
+        event(new VehicleStatusChangedEvent($vehicle));
+
         //$users = User::all();
         //Notification::send($users, new VehicleStatusChangedNotification($vehicle));
-        Notification::route('slack', env('SLACK_HOOK'))->notify(new VehicleStatusChangedNotification($vehicle));
+        //Notification::route('slack', env('SLACK_HOOK'))->notify(new VehicleStatusChangedNotification($vehicle));
         
         //$user = User::find(1);
         //$user->notify(new VehicleStatusChangedNotification($vehicle));
@@ -358,8 +361,10 @@ class VehicleController extends Controller
         //$users = User::all();
         //Notification::send($users, new VehicleStatusChangedNotification($vehicle));
 
-        $user = User::find(1);
-        $user->notify(new VehicleStatusChangedNotification($vehicle));
+        //$user = User::find(1);
+        //$user->notify(new VehicleStatusChangedNotification($vehicle));
+
+        event(new VehicleStatusChangedEvent($vehicle));
 
         return redirect()
                     ->route('vehicle.index')
